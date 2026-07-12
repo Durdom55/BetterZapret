@@ -23,7 +23,7 @@ import sys
 2. Затем скачайте оригинальный запрет от [Flowseal](https://github.com/Flowseal/zapret-discord-youtube)
    
 >[!NOTE]
->Оригинальный запрет был разработан пользователем [bol-van](https://github.com/bol-van/zapret/tree/master). Flowseal же сделал всё в формате bat-файлов
+>Оригинальный запрет был разработан пользователем [bol-van](https://github.com/bol-van/zapret/tree/master). Flowseal же сделал форк
 
 3. Откройте exe-файл от имени администратора, затем выберите нужный bat-файл, нажав на иконку кота в левом верхнем углу
    
@@ -71,3 +71,9 @@ else:
     os.system("sc stop windivert") # Отключение WinDivert
     print("Zapret viklichen") # Для отладки
    ```
+   ## Доп. информация
+   >[!NOTE]
+   >Все изображения и спрайты взяты из игры OMORI, созданной OMOCAT
+
+   >[!TIP]
+   >Для удобства пользования вы можете создать ярлык exe-файла, после в свойствах ярлыка поставить галочку на *запуск от имени администратора*
