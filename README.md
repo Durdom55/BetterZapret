@@ -42,7 +42,7 @@ import sys
   ```python
   if isadmin() == False:
     tkinter.messagebox.showerror(message="Программа запущена не от имени администратора")
-    sys.exit(1)
+    sys.exit(1) # Закрытие программы
   ```
   Затем проверяется, запущен ли уже запрет
   ```python
