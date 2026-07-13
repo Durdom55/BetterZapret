@@ -2,6 +2,7 @@
 ![GitHub Release](https://img.shields.io/github/v/release/Durdom55/BetterZapret) ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Durdom55/BetterZapret/total) ![GitHub License](https://img.shields.io/github/license/Durdom55/BetterZapret)
 
 Эта программа не является самим **zapret-discord-youtube**, а всего лишь дополнением к нему
+Эта программа не является самим **zapret-discord-youtube**, а всего лишь дополнением к нему (графической оболочкой)
 >[!WARNING]
 >Антивирусы могут помечать exe-файл из релиза, как вредоносный - **это ложное срабатывание**. Происходит это из-за отсутствия какой-либо цифровой подписи, так как я произвожу билд через *auto-py-to-exe*. Вы можете сами сделать билд проекта, скачав исходный код
 
