@@ -23,12 +23,15 @@ PathTrInv = PhotoImage(file="resources/button_sprite/MewoTrueInv.png")
 PathFl = PhotoImage(file="resources/button_sprite/MewoFalse.png")
 PathFlInv = PhotoImage(file="resources/button_sprite/MewoFalseInv.png")
 _listbut = PhotoImage(file="resources/button_sprite/List.png")
-
+_listbutInv = PhotoImage(file = "resources/button_sprite/ListInv.png")
+   
+#---ФУНКЦИИ---
 def ZaonBg():
     global ZaOn
     ZaOn = True
     but.config(image=butOn_i, bg="#f8f8f8", activebackground ="#f8f8f8")
     pathbut.config(bg="#f8f8f8", activebackground="#f8f8f8")
+    listbut.config(bg="#f8f8f8", activebackground="#f8f8f8", image=_listbut)
     if path == "":
         pathbut.config(image=PathFl)
     else:
@@ -40,13 +43,13 @@ def ZaoffBg():
     ZaOn = False
     but.config(image=butOff_i, bg="#070707", activebackground ="#070707")
     pathbut.config(bg="#070707", activebackground="#070707")
+    listbut.config(bg="#070707", activebackground="#070707", image=_listbutInv)
     if path == "":
         pathbut.config(image=PathFlInv)
     else:
         pathbut.config(image=PathTrInv)
     bg.config(image=Bg1)
     
-#---ФУНКЦИИ---
 def ZapretMode():
     if path != "":      
         if ZaOn == False:
@@ -101,9 +104,9 @@ bg.place(x=0, y=0, relwidth=1, relheight=1)
 frame1.pack(fill=BOTH, expand=True)
 but = Button(frame1, bg="#070707", activebackground ="#070707", image=butOff_i, relief=FLAT, bd=0, command=ZapretMode)
 but.place(x=129)
-pathbut = Button(frame1, relief=FLAT, bd=0, image=PathFl, activebackground="#070707", bg="#070707", width=62, height=36, command=PathCreate)
+pathbut = Button(frame1, relief=FLAT, bd=0, image=PathFlInv, activebackground="#070707", bg="#070707", width=62, height=36, command=PathCreate)
 pathbut.place(x=1, y=1)
-listbut = Button(frame1, relief=FLAT, bd=0, image=_listbut, activebackground="#f8f8f8", bg="#f8f8f8", width=60, height=62)
+listbut = Button(frame1, relief=FLAT, bd=0, image=_listbutInv, activebackground="#070707", bg="#070707", width=60, height=62)
 listbut.place(x=1,y=55)
 
 #---ХОД ПРОГРАММЫ---
