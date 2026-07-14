@@ -22,6 +22,7 @@ PathTr = PhotoImage(file="resources/button_sprite/MewoTrue.png")
 PathTrInv = PhotoImage(file="resources/button_sprite/MewoTrueInv.png")
 PathFl = PhotoImage(file="resources/button_sprite/MewoFalse.png")
 PathFlInv = PhotoImage(file="resources/button_sprite/MewoFalseInv.png")
+_listbut = PhotoImage(file="resources/button_sprite/List.png")
 
 def ZaonBg():
     global ZaOn
@@ -102,6 +103,8 @@ but = Button(frame1, bg="#070707", activebackground ="#070707", image=butOff_i, 
 but.place(x=129)
 pathbut = Button(frame1, relief=FLAT, bd=0, image=PathFl, activebackground="#070707", bg="#070707", width=62, height=36, command=PathCreate)
 pathbut.place(x=1, y=1)
+listbut = Button(frame1, relief=FLAT, bd=0, image=_listbut, activebackground="#f8f8f8", bg="#f8f8f8", width=60, height=62)
+listbut.place(x=1,y=55)
 
 #---ХОД ПРОГРАММЫ---
 def isadmin():
@@ -109,11 +112,11 @@ def isadmin():
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
-if isadmin() == False:
-    tkinter.messagebox.showerror(message="Программа запущена не от имени администратора")
-    sys.exit(1)
-else:
-    pass
+# if isadmin() == False:
+#     tkinter.messagebox.showerror(message="Программа запущена не от имени администратора")
+#     sys.exit(1)
+# else:
+#     pass
 ProgCheck = subprocess.run("tasklist", shell=True, text=True, capture_output=True)
 ProgCheckCount = ProgCheck.stdout.count("BetterZapret")
 if ProgCheckCount > 1:
