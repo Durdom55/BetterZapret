@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import font
 from pathlib import Path
+from tkinter.scrolledtext import ScrolledText
 import tkinter.messagebox
 import tkinter.filedialog
 import os
@@ -33,6 +34,49 @@ _listbutInv = PhotoImage(file = "resources/button_sprite/ListInv.png")
 pathlisttext = StringVar()
    
 #---ФУНКЦИИ---
+def newWindow():
+    global domain
+    window = Toplevel()
+    window.title("List-general")
+    window.protocol("WM_DELETE_WINDOW", lambda: closeWindow(window))
+    window.iconbitmap(default="BetZaicon.ico")
+    window.geometry("600x500+650+200")
+    window.resizable(False, False)
+    
+    fontEntry = font.Font(family="Consolas", size=10)
+    fontHeader = font.Font(family="Segoe UI", size=18, weight="bold")
+    fontText = font.Font(family='Consolas', size=12)
+    
+    header_frame=Frame(window, bg='#f0f2f5')
+    header_frame.pack(side=TOP, fill=X, pady=20)
+    
+    body_frame=Frame(window, bg='#f0f2f5')
+    body_frame.pack(side=TOP, fill=BOTH)
+    
+    Label(header_frame, text="Управление списком доменов", font=fontHeader).pack()
+    PathAuto = ttk.Button(body_frame, text="Найти автоматически", command=AutoPathList)
+    PathAuto.grid(row=1, column=1, ipadx=20, ipady=15, padx=[15, 0], pady=[10, 0])
+    PathShow = ttk.Button(body_frame, text="Выбрать вручную", command=PathListCreate)
+    PathShow.grid(row=2, column=1, ipadx=31, ipady=15, padx=[15, 0], pady=[10, 0],)
+    PathEntry = Entry(body_frame, state="readonly", bg='white', font=fontEntry, textvariable=pathlisttext, fg='#333333', relief=SOLID, highlightthickness=0, bd=1)
+    PathEntry.grid(row=1, column=0, ipadx=110, ipady=5, padx=[20, 0])
+    SaveBut = ttk.Button(body_frame, text="Сохранить", command=SaveDomains)
+    SaveBut.place(x=10, y=105)
+    domain = ScrolledText(window, bg='white', fg='#333333', font=fontText, bd=1, relief=SOLID, highlightthickness=0, wrap='none')
+    domain.place(height=260, width=580, x=10, y=230)
+    if pathList != "":
+        pathlisttext.set(pathList)
+        ListСhecker()
+    else:
+        pathlisttext.set("Путь к файлу не выбран...")
+    
+    window.grab_set()
+
+def SaveDomains():
+    domains = domain.get('1.0', 'end')
+    with open(pathList, "w") as f:
+        f.write(domains)
+    
 def readPath():
     global path, pathList
     with open("Paths.json", "r") as f:
@@ -132,17 +176,20 @@ def PathListCreate():
     if pathList != "" and pathList.endswith(".txt"):
         pathlisttext.set(pathList)
         writePath()
+        ListСhecker()
     elif pathList != "" and not pathList.endswith(".txt"):
         tkinter.messagebox.showwarning(message="Это не .txt файл!")
         try:
             PathListNull()
             readPath()
+            ListСhecker()
         except:
             PathListNull()
     else:
         try:
             PathListNull()
             readPath()
+            ListСhecker()
         except:
             PathListNull()
         print("error")
@@ -159,44 +206,20 @@ def AutoPathList():
                 break
         if found_path:
             pathlisttext.set(found_path)
+            pathList = str(found_path)
             writePath()
+            ListСhecker()
         else:
             tkinter.messagebox.showerror(message="Не удалось найти list-general.\nВыберите путь к файлу вручную")
     else:
         tkinter.messagebox.showerror(message="Сначала выберите стратегию (.bat-файл)")
-        
-def newWindow():
-    window = Toplevel()
-    window.title("List-general")
-    window.protocol("WM_DELETE_WINDOW", lambda: closeWindow(window))
-    window.iconbitmap(default="BetZaicon.ico")
-    window.geometry("600x500+650+200")
-    window.resizable(False, False)
-    
-    fontEntry = font.Font(family="Consolas", size=10)
-    fontHeader = font.Font(family="Segoe UI", size=18, weight="bold")
-    
-    header_frame=Frame(window, bg='#f0f2f5')
-    header_frame.pack(side=TOP, fill=X, pady=20)
-    
-    body_frame=Frame(window, bg='#f0f2f5')
-    body_frame.pack(side=TOP, fill=BOTH)
-    
-    Label(header_frame, text="Управление списком доменов", font=fontHeader).pack()
-    PathAuto = ttk.Button(body_frame, text="Найти автоматически", command=AutoPathList)
-    PathAuto.grid(row=1, column=1, ipadx=20, ipady=15, padx=[15, 0], pady=[10, 0])
-    PathShow = ttk.Button(body_frame, text="Выбрать вручную", command=PathListCreate)
-    PathShow.grid(row=2, column=1, ipadx=31, ipady=15, padx=[15, 0], pady=[10, 0],)
-    PathEntry = Entry(body_frame, state="readonly", bg='white', font=fontEntry, textvariable=pathlisttext, fg='#333333', relief=SOLID, highlightthickness=0, bd=1)
-    PathEntry.grid(row=1, column=0, ipadx=110, ipady=5, padx=[20, 0])
-    if pathList != "":
-        pathlisttext.set(pathList)
-    else:
-        pathlisttext.set("Путь к файлу не выбран...")
-    
-    window.grab_set()
-    
 
+def ListСhecker():
+    with open(pathList, 'r') as f:
+        for line in f:
+            domain.insert('1.0', f'\n{line.strip()}')
+        
+            
 def closeWindow(window):
     window.grab_release()
     window.destroy()
