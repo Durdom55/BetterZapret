@@ -1,4 +1,7 @@
 test.py
+test2.py
+test3.py
+batchange.txt
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

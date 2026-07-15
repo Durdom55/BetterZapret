@@ -13,6 +13,7 @@
 ```python
 from tkinter import *
 from tkinter import ttk
+from tkinter import font
 import tkinter.messagebox
 import tkinter.filedialog
 import os

@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import font
 import tkinter.messagebox
 import tkinter.filedialog
 import os
@@ -106,13 +107,22 @@ def newWindow():
     window.attributes('-topmost', 1)
     window.geometry("600x500+650+200")
     window.resizable(False, False)
-    Label(window, text="Домены сайтов", font=("Bahnschrift Bold", 17)).grid(row=1, column=1)
-    textPath = Label(window, text=f"Актуальный путь:\n     ", font=("Bahnschrift", 15))
-    textPath.grid(row=2, column=1, padx=[10, 0])
-    PathAuto = ttk.Button(window, text="Определить путь автоматически")
-    PathAuto.grid(row=2, ipadx=1, ipady=10, padx=[20, 0], pady=10)
-    PathShow = ttk.Button(window, text="Определить путь вручную")
-    PathShow.grid(row=3, ipadx=10, ipady=10, padx=[20,0], pady=1)
+    
+    fontEntry = font.Font(family="Consolas", size=10)
+    fontHeader = font.Font(family="Segoe UI", size=18, weight="bold")
+    
+    header_frame=Frame(window, bg='#f0f2f5')
+    header_frame.pack(side=TOP, fill=X, pady=20)
+    
+    body_frame=Frame(window, bg='#f0f2f5')
+    body_frame.pack(side=TOP, fill=BOTH)
+    Label(header_frame, text="Управление списком доменов", font=fontHeader).pack()
+    PathAuto = ttk.Button(body_frame, text="Найти автоматически")
+    PathAuto.grid(row=1, column=1, ipadx=20, ipady=15, padx=[15, 0], pady=[10, 0])
+    PathShow = ttk.Button(body_frame, text="Выбрать вручную")
+    PathShow.grid(row=2, column=1, ipadx=31, ipady=15, padx=[15, 0], pady=[10, 0],)
+    PathEntry = Entry(body_frame, bg='white', font=fontEntry, fg='#333333', relief=SOLID, highlightthickness=0, bd=1)
+    PathEntry.grid(row=1, column=0, ipadx=110, ipady=5, padx=[20, 0])
     window.grab_set()
     
 
