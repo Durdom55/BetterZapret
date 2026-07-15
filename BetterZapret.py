@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import font
+from pathlib import Path
 import tkinter.messagebox
 import tkinter.filedialog
 import os
@@ -12,6 +13,7 @@ import json
 ZaOn = False
 data={}
 path = ""
+pathList = ""
 #---ВИЗУАЛ---
 app = Tk()
 app.title("BetterZapret")
@@ -28,13 +30,22 @@ PathFl = PhotoImage(file="resources/button_sprite/MewoFalse.png")
 PathFlInv = PhotoImage(file="resources/button_sprite/MewoFalseInv.png")
 _listbut = PhotoImage(file="resources/button_sprite/List.png")
 _listbutInv = PhotoImage(file = "resources/button_sprite/ListInv.png")
+pathlisttext = StringVar()
    
 #---ФУНКЦИИ---
 def readPath():
-    global path
+    global path, pathList
     with open("Paths.json", "r") as f:
         data = json.load(f)
         path = data['BatPath']
+        pathList = data['ListPath']
+        
+def writePath():
+    with open("Paths.json", "w") as f:
+        data["BatPath"] = path
+        data['ListPath'] = pathList
+        json.dump(data, f, indent=4)
+    
 def ZaonBg():
     global ZaOn
     ZaOn = True
@@ -67,6 +78,14 @@ def ZapretMode():
             Zaoff()
     else:
         tkinter.messagebox.showwarning(message="Для корректной работы программы нужно выбрать стратегию (.bat файл).\nПожалуйста, кликните на Мяво (кошка в левом углу), чтобы выбрать нужную стратегию (.bat файл)")
+    
+def PathNull():
+    global path
+    path = ""   
+    
+def PathListNull():
+    global pathList
+    pathList = ""       
         
 def Zaon():
     ZaonBg()
@@ -91,30 +110,66 @@ def PathCreate():
             pathbut.config(image=PathTrInv)
         else:
             pathbut.config(image=PathTr)
-        with open("Paths.json", "w") as f:
-            data["BatPath"] = path
-            json.dump(data, f, indent=4)
+        writePath()
     elif path != "" and not path.endswith(".bat"):
         tkinter.messagebox.showwarning(message="Это не .bat файл!")
         try:
-            path = ""
+            PathNull()
             readPath()
         except:
-            path = ""
+            PathNull()
     else:
         try:
-            path = ""
+            PathNull()
             readPath()
         except:
-            path = ""
+            PathNull()
         print("error")
+
+def PathListCreate():
+    global pathList
+    pathList = tkinter.filedialog.askopenfilename() 
+    if pathList != "" and pathList.endswith(".txt"):
+        pathlisttext.set(pathList)
+        writePath()
+    elif pathList != "" and not pathList.endswith(".txt"):
+        tkinter.messagebox.showwarning(message="Это не .txt файл!")
+        try:
+            PathListNull()
+            readPath()
+        except:
+            PathListNull()
+    else:
+        try:
+            PathListNull()
+            readPath()
+        except:
+            PathListNull()
+        print("error")
+        
+def AutoPathList():
+    global path, pathList
+    if path != "":
+        zapret_dir = Path(path).parent
+        target_file = "list-general.txt"
+        found_path = None
+        for root, _, files in os.walk(zapret_dir):
+            if target_file in files:
+                found_path = Path(root) / target_file
+                break
+        if found_path:
+            pathlisttext.set(found_path)
+            writePath()
+        else:
+            tkinter.messagebox.showerror(message="Не удалось найти list-general.\nВыберите путь к файлу вручную")
+    else:
+        tkinter.messagebox.showerror(message="Сначала выберите стратегию (.bat-файл)")
         
 def newWindow():
     window = Toplevel()
     window.title("List-general")
     window.protocol("WM_DELETE_WINDOW", lambda: closeWindow(window))
     window.iconbitmap(default="BetZaicon.ico")
-    window.attributes('-topmost', 1)
     window.geometry("600x500+650+200")
     window.resizable(False, False)
     
@@ -126,13 +181,18 @@ def newWindow():
     
     body_frame=Frame(window, bg='#f0f2f5')
     body_frame.pack(side=TOP, fill=BOTH)
+    
     Label(header_frame, text="Управление списком доменов", font=fontHeader).pack()
-    PathAuto = ttk.Button(body_frame, text="Найти автоматически")
+    PathAuto = ttk.Button(body_frame, text="Найти автоматически", command=AutoPathList)
     PathAuto.grid(row=1, column=1, ipadx=20, ipady=15, padx=[15, 0], pady=[10, 0])
-    PathShow = ttk.Button(body_frame, text="Выбрать вручную")
+    PathShow = ttk.Button(body_frame, text="Выбрать вручную", command=PathListCreate)
     PathShow.grid(row=2, column=1, ipadx=31, ipady=15, padx=[15, 0], pady=[10, 0],)
-    PathEntry = Entry(body_frame, bg='white', font=fontEntry, fg='#333333', relief=SOLID, highlightthickness=0, bd=1)
+    PathEntry = Entry(body_frame, state="readonly", bg='white', font=fontEntry, textvariable=pathlisttext, fg='#333333', relief=SOLID, highlightthickness=0, bd=1)
     PathEntry.grid(row=1, column=0, ipadx=110, ipady=5, padx=[20, 0])
+    if pathList != "":
+        pathlisttext.set(pathList)
+    else:
+        pathlisttext.set("Путь к файлу не выбран...")
     
     window.grab_set()
     
