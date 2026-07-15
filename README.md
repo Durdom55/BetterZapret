@@ -12,6 +12,7 @@
 В этом проекте я использую исключительно встроенные библиотеки Python на Windows
 ```python
 from tkinter import *
+from tkinter import ttk
 import tkinter.messagebox
 import tkinter.filedialog
 import os
