@@ -7,8 +7,10 @@ import os
 import subprocess
 import ctypes
 import sys
+import json
 #---ПЕРЕМЕННЫЕ---
 ZaOn = False
+data={}
 path = ""
 #---ВИЗУАЛ---
 app = Tk()
@@ -28,6 +30,11 @@ _listbut = PhotoImage(file="resources/button_sprite/List.png")
 _listbutInv = PhotoImage(file = "resources/button_sprite/ListInv.png")
    
 #---ФУНКЦИИ---
+def readPath():
+    global path
+    with open("Paths.json", "r") as f:
+        data = json.load(f)
+        path = data['BatPath']
 def ZaonBg():
     global ZaOn
     ZaOn = True
@@ -63,7 +70,11 @@ def ZapretMode():
         
 def Zaon():
     ZaonBg()
-    os.startfile(path)
+    try:
+        os.startfile(path)
+        ZaonBg()
+    except:
+        tkinter.messagebox.showwarning(message="Ошибка при открытии bat-файла")
     print("Zapret vkluchen")
     
 def Zaoff():
@@ -80,21 +91,20 @@ def PathCreate():
             pathbut.config(image=PathTrInv)
         else:
             pathbut.config(image=PathTr)
-        with open("batchange.txt", "w") as f:
-            f.write(path)
+        with open("Paths.json", "w") as f:
+            data["BatPath"] = path
+            json.dump(data, f, indent=4)
     elif path != "" and not path.endswith(".bat"):
         tkinter.messagebox.showwarning(message="Это не .bat файл!")
         try:
             path = ""
-            with open("batchange.txt", "r") as f:
-                path = f.read()
+            readPath()
         except:
             path = ""
     else:
         try:
             path = ""
-            with open("batchange.txt", "r") as f:
-                path = f.read()
+            readPath()
         except:
             path = ""
         print("error")
@@ -123,6 +133,7 @@ def newWindow():
     PathShow.grid(row=2, column=1, ipadx=31, ipady=15, padx=[15, 0], pady=[10, 0],)
     PathEntry = Entry(body_frame, bg='white', font=fontEntry, fg='#333333', relief=SOLID, highlightthickness=0, bd=1)
     PathEntry.grid(row=1, column=0, ipadx=110, ipady=5, padx=[20, 0])
+    
     window.grab_set()
     
 
@@ -168,12 +179,11 @@ else:
     print("zapret vikl")
     
 try:
-    with open("batchange.txt", "r") as f:
-        path = f.read()
-        if ZaOn == False:
-            pathbut.config(image=PathTrInv)
-        else:
-            pathbut.config(image=PathTr)  
+    readPath()
+    if ZaOn == False:
+        pathbut.config(image=PathTrInv)
+    else:
+        pathbut.config(image=PathTr)  
 except FileNotFoundError:
     tkinter.messagebox.showwarning(message="Для корректной работы программы нужно выбрать стратегию (.bat файл).\nПожалуйста, кликните на Мяво (кошка в левом углу), чтобы выбрать нужную стратегию (.bat файл)")
 
