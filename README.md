@@ -71,7 +71,7 @@ else:
   ```python
   def Zaon():
       try: # Пытаемся открыть файл
-          os.startfile(path) # Запуска bat-файла
+          os.startfile(path) # Запуск bat-файла
           ZaonBg() # Смена фона и деталей интерфейса
       except: # Если не получается, то выводим ошибку
           tkinter.messagebox.showwarning(message="Ошибка при открытии bat-файла")
