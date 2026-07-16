@@ -35,7 +35,7 @@ pathlisttext = StringVar()
    
 #---ФУНКЦИИ---
 def newWindow():
-    global domain
+    global domain, SaveBut
     window = Toplevel()
     window.title("List-general")
     window.protocol("WM_DELETE_WINDOW", lambda: closeWindow(window))
@@ -60,7 +60,7 @@ def newWindow():
     PathShow.grid(row=2, column=1, ipadx=31, ipady=15, padx=[15, 0], pady=[10, 0],)
     PathEntry = Entry(body_frame, state="readonly", bg='white', font=fontEntry, textvariable=pathlisttext, fg='#333333', relief=SOLID, highlightthickness=0, bd=1)
     PathEntry.grid(row=1, column=0, ipadx=110, ipady=5, padx=[20, 0])
-    SaveBut = ttk.Button(body_frame, text="Сохранить", command=SaveDomains)
+    SaveBut = ttk.Button(body_frame, text="Сохранить", command=SaveDomains, state=DISABLED)
     SaveBut.place(x=10, y=105)
     domain = ScrolledText(window, bg='white', fg='#333333', font=fontText, bd=1, relief=SOLID, highlightthickness=0, wrap='none')
     domain.place(height=260, width=580, x=10, y=230)
@@ -71,6 +71,9 @@ def newWindow():
         pathlisttext.set("Путь к файлу не выбран...")
     
     window.grab_set()
+
+def SaveButOn():
+    SaveBut.config(state=NORMAL)
 
 def SaveDomains():
     domains = domain.get('1.0', 'end')
@@ -215,6 +218,7 @@ def AutoPathList():
         tkinter.messagebox.showerror(message="Сначала выберите стратегию (.bat-файл)")
 
 def ListСhecker():
+    SaveButOn()
     with open(pathList, 'r') as f:
         for line in f:
             domain.insert('1.0', f'\n{line.strip()}')
