@@ -15,6 +15,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import font
 from pathlib import Path
+from tkinter.scrolledtext import ScrolledText
 import tkinter.messagebox
 import tkinter.filedialog
 import os
@@ -38,9 +39,12 @@ import json
 4. Чтобы включить/отключить запрет нажмите на лампочку
    
    <img src="resources/icons_for_readme/OnOffGif.gif" width="222"/>
-   
 >[!IMPORTANT]
 >Во время **включения/отключения** может появиться **командная строка**, не пугайтесь - это **нормально**, подробнее смотрите [здесь](#включениеотключение)
+   
+5. Вы можете просматривать, изменять и добавлять домены: для этого кликните на иконку блокнота, затем в новом окне укажите путь к **list-general.txt**. После этих действий внизу появится список текущих доменов. Нажмите на кнопку **Сохранить**, чтобы применить к ним изменения
+   <img src="resources/icons_for_readme/ListGif.gif" width="222">
+
 
 ## Принцип работы программы
 ### Старт
@@ -60,13 +64,16 @@ else:
     print("zapret vikl") # Для отладки
   ```
   ### Добавление bat-файла
-  Когда вы добавляете путь к bat-файлу, выполняется метод [PathCreate](BetterZapret.py#L69-94)
+  Когда вы добавляете путь к bat-файлу, выполняется метод [PathCreate](BetterZapret.py#L159-181)
   ### Включение/Отключение
   Во время включения выполняется запрос в командную строку, поэтому она может появиться на секунду
   ```python
   def Zaon():
-    ZaonBg() # Смена фона и деталей интерфейса
-    os.startfile(path) # Запуск выбранного bat-файла
+      try: # Пытаемся открыть файл
+          os.startfile(path) # Запуска bat-файла
+          ZaonBg() # Смена фона и деталей интерфейса
+      except: # Если не получается, то выводим ошибку
+          tkinter.messagebox.showwarning(message="Ошибка при открытии bat-файла")
     print("Zapret vkluchen") # Для отладки
   ```
    Во время отключения также выполняется запрос в командную строку, поэтому она может появиться на секунду
@@ -77,6 +84,10 @@ else:
     os.system("sc stop windivert") # Отключение WinDivert
     print("Zapret viklichen") # Для отладки
    ```
+   ### Поиск list-general
+   За автоматический поиск отвечает функция [AutoPathList](BetterZapret.py#L207-225)
+
+   Функция поиска вручную работает аналогично [PathCreate](BetterZapret.py#L159-181)
    ## Доп. информация
    >[!NOTE]
    >Все изображения и спрайты взяты из игры OMORI, созданной OMOCAT

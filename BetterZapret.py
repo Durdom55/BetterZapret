@@ -64,13 +64,21 @@ def newWindow():
     SaveBut.place(x=10, y=105)
     domain = ScrolledText(window, bg='white', fg='#333333', font=fontText, bd=1, relief=SOLID, highlightthickness=0, wrap='none')
     domain.place(height=260, width=580, x=10, y=230)
+    domain.config(undo=True, maxundo=10)
     if pathList != "":
         pathlisttext.set(pathList)
         ListСhecker()
     else:
         pathlisttext.set("Путь к файлу не выбран...")
+    domain.bind("<Control-z>", undoAction)
     
     window.grab_set()
+    
+def undoAction(event):
+    try:
+        domain.text.edit_undo()
+    except Exception:
+        pass
 
 def SaveButOn():
     SaveBut.config(state=NORMAL)
@@ -135,7 +143,6 @@ def PathListNull():
     pathList = ""       
         
 def Zaon():
-    ZaonBg()
     try:
         os.startfile(path)
         ZaonBg()
@@ -219,9 +226,12 @@ def AutoPathList():
 
 def ListСhecker():
     SaveButOn()
+    domain.config(undo=False)
     with open(pathList, 'r') as f:
         for line in f:
             domain.insert('1.0', f'\n{line.strip()}')
+    domain.edit_modified(False)
+    domain.config(undo=True)
         
             
 def closeWindow(window):
@@ -246,11 +256,11 @@ def isadmin():
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
-# if isadmin() == False:
-#     tkinter.messagebox.showerror(message="Программа запущена не от имени администратора")
-#     sys.exit(1)
-# else:
-#     pass
+if isadmin() == False:
+    tkinter.messagebox.showerror(message="Программа запущена не от имени администратора")
+    sys.exit(1)
+else:
+    pass
 ProgCheck = subprocess.run("tasklist", shell=True, text=True, capture_output=True)
 ProgCheckCount = ProgCheck.stdout.count("BetterZapret")
 if ProgCheckCount > 1:
