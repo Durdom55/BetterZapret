@@ -148,13 +148,13 @@ def Zaon():
         ZaonBg()
     except:
         tkinter.messagebox.showwarning(message="Ошибка при открытии bat-файла")
-    print("Zapret vkluchen")
+    # print("Zapret vkluchen")
     
 def Zaoff():
     ZaoffBg()
     os.system("taskkill /im winws.exe")
     os.system("sc stop windivert")
-    print("Zapret viklichen")
+    #print("Zapret viklichen")
     
 def PathCreate():
     global path
@@ -178,7 +178,7 @@ def PathCreate():
             readPath()
         except:
             PathNull()
-        print("error")
+        #print("error")
 
 def PathListCreate():
     global pathList
@@ -202,7 +202,7 @@ def PathListCreate():
             ListСhecker()
         except:
             PathListNull()
-        print("error")
+        #print("error")
         
 def AutoPathList():
     global path, pathList
@@ -264,16 +264,14 @@ else:
 ProgCheck = subprocess.run("tasklist", shell=True, text=True, capture_output=True)
 ProgCheckCount = ProgCheck.stdout.count("BetterZapret")
 if ProgCheckCount > 1:
-    print("Закрыл")
+    #print("Закрыл")
     sys.exit(1)
 else:
     pass
 ZapretRun = subprocess.run("sc qc windivert", shell=True)
 if ZapretRun.returncode == 0:
     ZaonBg()
-    print("zapret vkl")
-else:
-    print("zapret vikl")
+    #print("zapret vkl")
     
 try:
     readPath()

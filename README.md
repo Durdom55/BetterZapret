@@ -60,9 +60,6 @@ import json
 ZapretRun = subprocess.run("sc qc windivert", shell=True)
 if ZapretRun.returncode == 0:
     ZaonBg() # Смена фона и деталей интерфейса
-    print("zapret vkl") # Для отладки
-else:
-    print("zapret vikl") # Для отладки
   ```
   ### Добавление bat-файла
   Когда вы добавляете путь к bat-файлу, выполняется метод [PathCreate](BetterZapret.py#L159-181)
@@ -75,7 +72,6 @@ else:
           ZaonBg() # Смена фона и деталей интерфейса
       except: # Если не получается, то выводим ошибку
           tkinter.messagebox.showwarning(message="Ошибка при открытии bat-файла")
-    print("Zapret vkluchen") # Для отладки
   ```
    Во время отключения также выполняется запрос в командную строку, поэтому она может появиться на секунду
    ```python
@@ -83,7 +79,6 @@ else:
     ZaoffBg() # Смена фона и деталей интерфейса
     os.system("taskkill /im winws.exe") # Выключение запрета
     os.system("sc stop windivert") # Отключение WinDivert
-    print("Zapret viklichen") # Для отладки
    ```
    ### Поиск list-general
    За автоматический поиск отвечает функция [AutoPathList](BetterZapret.py#L207-225)
